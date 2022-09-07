@@ -10,11 +10,34 @@ const actions = {
 }
 
 export let defaultState = {
-  all: []
+  all: [],
+  fetched: false,
 }
 
 export const findInventory = createAction(actions.INVENTORY_GET_ALL, () => {
-  //TODO
+  (dispatch, getState, config) => axios
+	.get(`${config.restAPIUrl}/inventory`)
+	.then((suc) => dispatch(refreshInventory(suc.data)))
+})
+
+export const createInventory = createAction(actions.CREATE, () => {
+
+})
+
+export const updateInventory = createAction(actions.UPDATE, () => {
+
+})
+
+export const deleteInventory = createAction(actions.DELETE, () => {
+
+})
+
+export const pendingInventory = createAction(actions._PENDING, () => {
+
+})
+
+export const refreshInventory = createAction(actions.REFRESH, () => {
+
 })
 
 export default handleActions({
