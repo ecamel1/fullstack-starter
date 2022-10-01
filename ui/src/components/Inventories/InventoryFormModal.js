@@ -8,6 +8,8 @@ import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
+import { Menu, MenuItem, Checkbox } from '@material-ui/core'
+
 class InventoryFormModal extends React.Component {
   render() {
     const {
@@ -16,9 +18,23 @@ class InventoryFormModal extends React.Component {
       handleInventory,
       title,
       initialValues
-   } = this.props
-   return (
-     <Dialog
+    } = this.props
+
+    const errors = {}
+    const requiredFields = [
+      'name',
+      'productType',
+      'unitOfMeasurement'
+    ]
+                                  
+    requiredFields.forEach(field => {
+      if(!values[field]){
+        errors[field] = "Required"
+      }
+    })
+
+    return (
+      <Dialog
         open={this.props.isDialogOpen}
         maxWidth='sm'
         fullWidth={true}
@@ -29,30 +45,94 @@ class InventoryFormModal extends React.Component {
           onSubmit={values => {
             handleInventory(values)
             handleDialog(true)
-	  }}>
-	   <Form
-	     noValidate
-	     autoComplete='off'
-	     id={formName}
-	   >
-	   <DialogTitle id='alert-dialog-title'>
+          }}>
+          {helpers =>
+            <Form
+              noValidate
+              autoComplete='off'
+              id={formName}
+            >
+              <DialogTitle id='alert-dialog-title'>
                 {`${title} Inventory`}
-           </DialogTitle>
-	   <DialogContent>
-	       <Grid container>
-	          <Grid item xs={12} sm={12}>
-	          //Name: Textfield/Required
-	   	  //Product Type: Dropdown
-	   //Description: Textfield Optional {inital value "")
-	   //Average Price: Number Text Field input. Optional. Initial value 0
-	   //Amount
-	   //Unit of Measurement
-	   //Best before date
-	   //Never expires
-	          </Grid>
-	       </Grid>
-	   </DialogContent>
-	   <DialogActions>
+              </DialogTitle>
+              <DialogContent>
+                <Grid container>
+                  {/* Name field */}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='name'
+                      label='Name'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/* Product Type CHANGE TO DROPDOWN*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='productType'
+                      label='productType'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/* Description */}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='description'
+                      label='description'                    
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/*Average Price*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='averagePrice'
+                      label='averagePrice'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/*Amount*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='amount'
+                      label='amount'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/*Units of Measurement CHANGE TO DROPDOWNS*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='unitOfMeasurement'
+                      label='unitOfMeasurement'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/*Best Before Date*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='bestBefore'
+                      label='bestBefore'
+                      component={TextField}
+                    />
+                  </Grid>
+                  {/*Never Expires CHECKBOX*/}
+                  <Grid item xs={12} sm={12}>
+                    <Field
+                      custom={{ variant: 'outlined', fullWidth: true, }}
+                      name='expires'
+                      label='expires'
+                      component={TextField}
+                    />
+                  </Grid>
+
+                </Grid>
+              </DialogContent>
+              <DialogActions>
                 <Button onClick={() => { handleDialog(false) }} color='secondary'>Cancel</Button>
                 <Button
                   disableElevation
@@ -63,9 +143,10 @@ class InventoryFormModal extends React.Component {
                   disabled={!helpers.dirty}>
                   Save
                 </Button>
-	   </Form>
-         }
-	</Formik>
+              </DialogActions>
+            </Form>
+          }
+        </Formik>
       </Dialog>
     )
   }
