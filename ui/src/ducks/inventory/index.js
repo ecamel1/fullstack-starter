@@ -31,9 +31,9 @@ export const createInventory = createAction(actions.CREATE, (inventory) => {
             }
           })
       invs.push(suc.data)
-      dispatch(refreshProducts(invs))
+      dispatch(refreshInventory(invs))
       })
-)
+})
 
 export const deleteInventory = createAction(actions.DELETE, (ids) => {
   (dispatch, getState, config) => axios
@@ -45,9 +45,9 @@ export const deleteInventory = createAction(actions.DELETE, (ids) => {
           invs.push(inv)
         }
       })
-      dispatch(refreshProducts(invs))
+      dispatch(refreshInventory(invs))
    })
-)
+})
 
 
 export const refreshInventory = createAction(actions.REFRESH, (payload) =>
