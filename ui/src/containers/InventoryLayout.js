@@ -52,7 +52,8 @@ const InventoryLayout = (props) => {
 	  description: '',
 	  averagePrice: 0,
 	  amount: 0,
-	  neverExpires: false
+	  neverExpires: false,
+	  bestBefore: moment(new Date()).format("YYYY-MM-DD")
   }
   const classes = useStyles()
   const dispatch = useDispatch()
@@ -175,8 +176,8 @@ const InventoryLayout = (props) => {
 	  isDialogOpen={isCreateOpen}
 	  handleDialog={toggleModals}
 	  handleInventory={createInventory}
-	  initialValues={ initialValues }
-	  inventory={ normalizedInventory }
+	  initialValues={ initialValues } 
+	  unitOfMeasurement={ normalizedInventory.map(bar => bar.unitOfMeasurement) }
 	/>
         </TableContainer>
       </Grid>
