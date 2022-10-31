@@ -36,6 +36,7 @@ const normalizeInventory = (inventory) => inventory.map(inv => ({
   bestBeforeDate: moment(inv.bestBeforeDate).format('MM/DD/YYYY')
 }))
 
+
 const headCells = [
   { id: 'name', align: 'left', disablePadding: true, label: 'Name' },
   { id: 'productType', align: 'right', disablePadding: false, label: 'Product' },
@@ -46,12 +47,21 @@ const headCells = [
 ]
 
 const InventoryLayout = (props) => {
+  const initialValues = {
+	  name: '',
+	  description: '',
+	  averagePrice: 0,
+	  amount: 0,
+	  neverExpires: false
+  }
   const classes = useStyles()
-  const dispatch = useDispatch()
-  
+  const dispatch = useDispatch() 
+
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const createInventory = useCallback(inventory => { dispatch(inventoryDuck.createInventory(inventory)) }, [dispatch])
+
 
   useEffect(() => {
     if (!isFetched) {
@@ -166,7 +176,9 @@ const InventoryLayout = (props) => {
 	  isDialogOpen={isCreateOpen}
 	  handleDialog={toggleModals}
 	  handleInventory={createInventory}
-	  initalValues={{}}
+	  initialValues={ initialValues }
+	  unitOfMeasurement={ MeasurementUnits }	 
+	  products={products}
 	/>
         </TableContainer>
       </Grid>

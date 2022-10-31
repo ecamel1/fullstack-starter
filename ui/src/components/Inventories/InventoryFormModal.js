@@ -8,30 +8,47 @@ import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
-import { Menu, MenuItem, Checkbox } from '@material-ui/core'
+import { Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
   render() {
     const {
       formName,
+      isDialogOpen,
       handleDialog,
       handleInventory,
       title,
-      initialValues
+      initialValues,
+      unitOfMeasurement,
+      products
     } = this.props
+	console.log(JSON.stringify(this.props.unitOfMeasurement))
+	  
+    const validate = values => {
+       const errors = {}
 
-    const errors = {}
-    const requiredFields = [
-      'name',
-      'productType',
-      'unitOfMeasurement'
-    ]
-                                  
-    requiredFields.forEach(field => {
-      if(!values[field]){
-        errors[field] = "Required"
-      }
-    })
+       if(!values.name){
+          errors.name = 'Name is required';
+       } 
+       if (!values.productType){
+          errors.productType = 'Product Type is required';
+       }
+
+       if(values.averagePrice < 0){
+	  errors.averagePrice = 'Price must be greater than 0';
+       }
+
+       if(values.amount < 0){
+          errors.averagePrice = 'Amount must be greater than 0';
+       }
+
+       if (!values.unitOfMeasurement){
+          errors.unitOfMeasurement = 'Measurement is required';
+       }
+
+       return errors;
+    }                   
+    
 
     return (
       <Dialog
@@ -42,8 +59,10 @@ class InventoryFormModal extends React.Component {
       >
         <Formik
           initialValues={initialValues}
+	  validate={validate}
           onSubmit={values => {
-            handleInventory(values)
+            validate(values)
+	    handleInventory(values)
             handleDialog(true)
           }}>
           {helpers =>
@@ -66,14 +85,21 @@ class InventoryFormModal extends React.Component {
                       component={TextField}
                     />
                   </Grid>
-                  {/* Product Type CHANGE TO DROPDOWN*/}
+                  {/* Product Type*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      select
                       custom={{ variant: 'outlined', fullWidth: true, }}
-                      name='productType'
+                      name='Product Type'
                       label='productType'
                       component={TextField}
-                    />
+                    >
+		    {products.map((products) => (
+		      <MenuItem key={products.id} value={products.name}>
+		        {products.name}
+		      </MenuItem>
+		    ))} 		    
+		  </Field>
                   </Grid>
                   {/* Description */}
                   <Grid item xs={12} sm={12}>
@@ -105,30 +131,45 @@ class InventoryFormModal extends React.Component {
                   {/*Units of Measurement CHANGE TO DROPDOWNS*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      select
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='unitOfMeasurement'
-                      label='unitOfMeasurement'
+                      label='Unit Of Measurement'
                       component={TextField}
-                    />
+                    >
+		  { /* {unitOfMeasurement.map(unit) => (
+			 <MenuItem key={unit} value={unit.name}>
+			    {unit.name}
+                        </MenuItem>
+                      ))}
+		      */}
+		  </Field>
                   </Grid>
                   {/*Best Before Date*/}
                   <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBefore'
-                      label='bestBefore'
+                      label='Best Before'
+		      inputFormat="MM/DD/YYYY"
                       component={TextField}
                     />
                   </Grid>
                   {/*Never Expires CHECKBOX*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      type="checkbox"
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='expires'
                       label='expires'
-                      component={TextField}
+                      component={Checkbox} 
                     />
-                  </Grid>
+		    {/*
+
+		  <FormControlLabel control={<Checkbox defaultChecked />} label="Never Expires" />
+                  */}
+
+		  </Grid>
 
                 </Grid>
               </DialogContent>
