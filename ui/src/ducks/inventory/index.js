@@ -1,4 +1,5 @@
 import { createAction, handleActions } from 'redux-actions'
+import axios from 'axios'
 
 const actions = {
   INVENTORY_GET_ALL: 'inventory/get_all',
@@ -14,13 +15,13 @@ export let defaultState = {
   fetched: false,
 }
 
-export const findInventory = createAction(actions.INVENTORY_GET_ALL, () => {
+export const findInventory = createAction(actions.INVENTORY_GET_ALL, () => (
   (dispatch, getState, config) => axios
 	.get(`${config.restAPIUrl}/inventory`)
 	.then((suc) => dispatch(refreshInventory(suc.data)))
-})
+))
 
-export const createInventory = createAction(actions.CREATE, (inventory) => {
+export const createInventory = createAction(actions.CREATE, (inventory) => (
   (dispatch, getState, config) => axios
         .post(`${config.restAPIUrl}/inventory`, inventory)
         .then((suc) => {
@@ -31,11 +32,11 @@ export const createInventory = createAction(actions.CREATE, (inventory) => {
             }
           })
       invs.push(suc.data)
-      dispatch(refreshProducts(invs))
+      dispatch(refreshInventory(invs))
       })
-)
+))
 
-export const deleteInventory = createAction(actions.DELETE, (ids) => {
+export const deleteInventory = createAction(actions.DELETE, (ids) => (
   (dispatch, getState, config) => axios
     .delete(`${config.restAPIUrl}/inventory`, { data: ids })
     .then((suc) => {
@@ -45,9 +46,9 @@ export const deleteInventory = createAction(actions.DELETE, (ids) => {
           invs.push(inv)
         }
       })
-      dispatch(refreshProducts(invs))
+      dispatch(refreshInventory(invs))
    })
-)
+))
 
 
 export const refreshInventory = createAction(actions.REFRESH, (payload) =>
