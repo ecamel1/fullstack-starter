@@ -56,9 +56,10 @@ const InventoryLayout = (props) => {
 	  bestBefore: moment(new Date()).format("YYYY-MM-DD")
   }
   const classes = useStyles()
-  const dispatch = useDispatch()
-  
+  const dispatch = useDispatch() 
+
   const inventory = useSelector(state => state.inventory.all)
+  const products = useSelector(state => state.products.all)
   const isFetched = useSelector(state => state.inventory.fetched && state.products.fetched)
   const createInventory = useCallback(inventory => { dispatch(inventoryDuck.createInventory(inventory)) }, [dispatch])
 
@@ -176,8 +177,9 @@ const InventoryLayout = (props) => {
 	  isDialogOpen={isCreateOpen}
 	  handleDialog={toggleModals}
 	  handleInventory={createInventory}
-	  initialValues={ initialValues } 
-	  unitOfMeasurement={ normalizedInventory.map(bar => bar.unitOfMeasurement) }
+	  initialValues={ initialValues }
+	  unitOfMeasurement={ MeasurementUnits }	 
+	  products={products}
 	/>
         </TableContainer>
       </Grid>

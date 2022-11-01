@@ -8,10 +8,10 @@ import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
-import { Menu, MenuItem, Checkbox } from '@material-ui/core'
+import {  MenuItem, Checkbox } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
-render() {
+  render() {
     const {
       formName,
       isDialogOpen,
@@ -19,32 +19,36 @@ render() {
       handleInventory,
       title,
       initialValues,
-      bestBeforeDate,
-      unitOfMeasurement
+      unitOfMeasurement,
+      products
     } = this.props
-
 	
-    const errors = {}
-    const fields = [
-      'name',
-      'productType',
-      'unitOfMeasurement'
-    ]
-
-                                  
-    const validate = (fields) => {
+	  
+    const validate = values => {
        const errors = {}
 
-       if(!fields.name){
+       if(!values.name){
           errors.name = 'Name is required';
-       } else if (!fields.productType){
-          errors.name = 'Product Type is required';
-       } else if (!fields.unitOfMeasurement){
-          errors.name = 'Measurement is required';
+       } 
+       if (!values.productType){
+          errors.productType = 'Product Type is required';
+       } 
+
+       if(values.averagePrice < 0){
+	  errors.averagePrice = 'Price must be greater than 0';
+       } 
+
+       if(values.amount < 0){
+          errors.averagePrice = 'Amount must be greater than 0';
+       }
+
+       if (!values.unitOfMeasurement){
+          errors.unitOfMeasurement = 'Measurement is required';
        }
 
        return errors;
-    }
+    }                   
+    
 
     return (
       <Dialog
@@ -55,8 +59,10 @@ render() {
       >
         <Formik
           initialValues={initialValues}
+	  validate={validate}
           onSubmit={values => {
-            handleInventory(values)
+            validate(values)
+	    handleInventory(values)
             handleDialog(true)
           }}>
           {helpers =>
@@ -73,29 +79,34 @@ render() {
                   {/* Name field */}
                   <Grid item xs={12} sm={12}>
                     <Field
-		      required
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='name'
                       label='Name'
                       component={TextField}
                     />
                   </Grid>
-                  {/* Product Type CHANGE TO DROPDOWN*/}
+                  {/* Product Type*/}
                   <Grid item xs={12} sm={12}>
                     <Field
-		      required
+		      select
                       custom={{ variant: 'outlined', fullWidth: true, }}
-                      name='productType'
+                      name='Product Type'
                       label='productType'
                       component={TextField}
-                    />
+                    >
+		    {products.map((products) => (
+		      <MenuItem key={products.id} value={products.name}>
+		        {products.name}
+		      </MenuItem>
+		    ))} 		    
+		  </Field>
                   </Grid>
-		  {/* Description */}
+                  {/* Description */}
                   <Grid item xs={12} sm={12}>
                     <Field
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='description'
-                      label='description'
+                      label='description'                    
                       component={TextField}
                     />
                   </Grid>
@@ -105,7 +116,6 @@ render() {
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='averagePrice'
                       label='averagePrice'
-		      type='number'
                       component={TextField}
                     />
                   </Grid>
@@ -115,45 +125,46 @@ render() {
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='amount'
                       label='amount'
-		      type='number'
                       component={TextField}
                     />
                   </Grid>
-                  {/*Units of Measurement CHANGE TO DROPDOWNS*/}
+                  {/*Units of Measurement*/}
                   <Grid item xs={12} sm={12}>
                     <Field
-		      required
 		      select
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='unitOfMeasurement'
-                      label='unitOfMeasurement'
+                      label='Unit Of Measurement'
                       component={TextField}
                     >
-		    {unitOfMeasurement.map((option) => (  
-		      <MenuItem key={option.value} value={option.value}>
-			{option}
-		      </MenuItem>
-		    ))}
+		  { Object.keys(unitOfMeasurement).map(unit => 
+			<MenuItem key={unit} value={unit}>
+			    {unit}
+                        </MenuItem>
+                      )}
+		     
 		  </Field>
                   </Grid>
                   {/*Best Before Date*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      type="date"
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBefore'
-                      label='bestBefore'
+                      label='Best Before' 
                       component={TextField}
                     />
                   </Grid>
-                  {/*Never Expires CHECKBOX*/}
+                  {/*Never Expires*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      type="checkbox"
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='expires'
                       label='expires'
-                      component={TextField}
-                    />
-                  </Grid>
+                      component={Checkbox} 
+                    /> Expires
+		  </Grid>
 
                 </Grid>
               </DialogContent>
