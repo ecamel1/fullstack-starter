@@ -8,7 +8,7 @@ import React from 'react'
 import TextField from '../Form/TextField'
 import { Field, Form, Formik } from 'formik'
 
-import { Menu, MenuItem, Checkbox, FormControlLabel } from '@material-ui/core'
+import {  MenuItem, Checkbox } from '@material-ui/core'
 
 class InventoryFormModal extends React.Component {
   render() {
@@ -22,7 +22,7 @@ class InventoryFormModal extends React.Component {
       unitOfMeasurement,
       products
     } = this.props
-	console.log(JSON.stringify(this.props.unitOfMeasurement))
+	
 	  
     const validate = values => {
        const errors = {}
@@ -32,11 +32,11 @@ class InventoryFormModal extends React.Component {
        } 
        if (!values.productType){
           errors.productType = 'Product Type is required';
-       }
+       } 
 
        if(values.averagePrice < 0){
 	  errors.averagePrice = 'Price must be greater than 0';
-       }
+       } 
 
        if(values.amount < 0){
           errors.averagePrice = 'Amount must be greater than 0';
@@ -128,7 +128,7 @@ class InventoryFormModal extends React.Component {
                       component={TextField}
                     />
                   </Grid>
-                  {/*Units of Measurement CHANGE TO DROPDOWNS*/}
+                  {/*Units of Measurement*/}
                   <Grid item xs={12} sm={12}>
                     <Field
 		      select
@@ -137,25 +137,25 @@ class InventoryFormModal extends React.Component {
                       label='Unit Of Measurement'
                       component={TextField}
                     >
-		  { /* {unitOfMeasurement.map(unit) => (
-			 <MenuItem key={unit} value={unit.name}>
-			    {unit.name}
+		  { Object.keys(unitOfMeasurement).map(unit => 
+			<MenuItem key={unit} value={unit}>
+			    {unit}
                         </MenuItem>
-                      ))}
-		      */}
+                      )}
+		     
 		  </Field>
                   </Grid>
                   {/*Best Before Date*/}
                   <Grid item xs={12} sm={12}>
                     <Field
+		      type="date"
                       custom={{ variant: 'outlined', fullWidth: true, }}
                       name='bestBefore'
-                      label='Best Before'
-		      inputFormat="MM/DD/YYYY"
+                      label='Best Before' 
                       component={TextField}
                     />
                   </Grid>
-                  {/*Never Expires CHECKBOX*/}
+                  {/*Never Expires*/}
                   <Grid item xs={12} sm={12}>
                     <Field
 		      type="checkbox"
@@ -163,12 +163,7 @@ class InventoryFormModal extends React.Component {
                       name='expires'
                       label='expires'
                       component={Checkbox} 
-                    />
-		    {/*
-
-		  <FormControlLabel control={<Checkbox defaultChecked />} label="Never Expires" />
-                  */}
-
+                    /> Expires
 		  </Grid>
 
                 </Grid>

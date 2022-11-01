@@ -52,7 +52,8 @@ const InventoryLayout = (props) => {
 	  description: '',
 	  averagePrice: 0,
 	  amount: 0,
-	  neverExpires: false
+	  neverExpires: false,
+	  bestBefore: moment(new Date()).format("YYYY-MM-DD")
   }
   const classes = useStyles()
   const dispatch = useDispatch() 
